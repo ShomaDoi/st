@@ -1,0 +1,29 @@
+--- x.c
++++ x.c
+@@ -156,7 +156,6 @@ static int xicdestroy(XIC, XPointer, XPointer);
+ static void xinit(int, int);
+ static void updatexy(void);
+ static XImage *loadff(const char *);
+-static void bgreload();
+ static void bginit();
+ static void cresize(int, int);
+ static void xresize(int, int);
+@@ -1306,18 +1305,6 @@ loadff(const char *filename)
+ 	return xi;
+ }
+ 
+-/*
+- * reload background image on USR1 signal
+- */
+-void
+-bgreload()
+-{
+-	XFreeGC(xw.dpy, xw.bggc);
+-	bginit();
+-	redraw();
+-	signal(SIGUSR1, bgreload);
+-}
+-
+ /*
+  * initialize background image
+  */

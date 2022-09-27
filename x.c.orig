@@ -167,6 +167,7 @@ static void ximinstantiate(Display *, XPointer, XPointer);
 static void ximdestroy(XIM, XPointer, XPointer);
 static int xicdestroy(XIC, XPointer, XPointer);
 static void xinit(int, int);
+static void bgreload();
 static void cresize(int, int);
 static void xresize(int, int);
 static void xhints(void);
@@ -1270,8 +1271,18 @@ xinit(int cols, int rows)
 
 
 
+void
+bgreload()
+{
+	XFreeGC(xw.dpy, xw.bggc);
+	bginit();
+	redraw();
+	signal(SIGUSR1, bgreload);
+}
 
-
+/*
+ * initialize background image
+ */
 
 
 
@@ -2185,6 +2196,8 @@ run:
 	rows = MAX(rows, 1);
 	tnew(cols, rows);
 	xinit(cols, rows);
+	bginit();
+	signal(SIGUSR1, bgreload);
 	xsetenv();
 	selinit();
 	run();
